@@ -1,6 +1,9 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Attest struct {
-	ID uint `json:"id" gorm:"primary_key"`
+	gorm.Model
+	DeviceID uint
 	Device Device
 }

@@ -1,5 +1,7 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Device struct {
-	ID uint `json:"id" gorm:"primary_key"`
+	gorm.Model
 }
