@@ -12,6 +12,10 @@ func main() {
 	models.ConnectDatabase()
 
 	r.GET("/devices", controllers.FindDevices)
+	r.GET("/attests", controllers.FindAttests)
+
+	r.POST("/devices", controllers.CreateDevice)
+	r.POST("/attests", controllers.CreateAttest)
 
 	err := r.Run()
 	if err != nil {

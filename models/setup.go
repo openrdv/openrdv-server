@@ -15,6 +15,7 @@ func ConnectDatabase() {
 	}
 
 	database.AutoMigrate(&Device{})
+	database.AutoMigrate(&Attest{})
 
 	DB = database
 }
