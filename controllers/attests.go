@@ -5,11 +5,11 @@ import (
 	"gorm.io/datatypes"
 	"net/http"
 	"openrdv-server/models"
-	"strconv"
 )
 
 type CreateAttestInput struct {
-	DeviceID string
+	UID    string
+	Token  string
 	Result datatypes.JSON
 }
 
@@ -17,7 +17,7 @@ func FindAttests(c *gin.Context) {
 	var attests []models.Attest
 	models.DB.Find(&attests)
 
-	c.JSON(http.StatusOK, gin.H{"data": attests})
+	c.JSON(http.StatusOK, gin.H{"attests": attests})
 }
 
 func CreateAttest(c *gin.Context) {
@@ -28,8 +28,11 @@ func CreateAttest(c *gin.Context) {
 	}
 
 	var device models.Device
-	id, _ := strconv.Atoi(input.DeviceID)
-	models.DB.First(&device, uint(id))
+	result := models.DB.Where("uid = ?", input.UID).Where("token = ?", input.Token).First(&device)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+		return
+	}
 
 	// Create attest
 	attest := models.Attest{Device: device, Result: input.Result}

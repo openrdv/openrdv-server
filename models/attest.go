@@ -8,6 +8,6 @@ type AttestModuleResult map[string]string
 type Attest struct {
 	gorm.Model
 	DeviceID uint
-	Device Device
-	Result datatypes.JSON
+	Device   Device
+	Result   datatypes.JSON
 }
