@@ -2,12 +2,15 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"gorm.io/datatypes"
 	"net/http"
 	"openrdv-server/models"
+	"strconv"
 )
 
 type CreateAttestInput struct {
-	DeviceID uint `json:"device_id"`
+	DeviceID string
+	Result datatypes.JSON
 }
 
 func FindAttests(c *gin.Context) {
@@ -25,10 +28,11 @@ func CreateAttest(c *gin.Context) {
 	}
 
 	var device models.Device
-	models.DB.First(&device, input.DeviceID)
+	id, _ := strconv.Atoi(input.DeviceID)
+	models.DB.First(&device, uint(id))
 
 	// Create attest
-	attest := models.Attest{Device: device}
+	attest := models.Attest{Device: device, Result: input.Result}
 	models.DB.Create(&attest)
 
 	c.JSON(http.StatusOK, gin.H{"data": attest})
