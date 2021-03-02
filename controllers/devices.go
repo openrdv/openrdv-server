@@ -10,7 +10,7 @@ import (
 
 type CreateDeviceInput struct {
 	UID     string
-	UIDType string
+	UIDType string `json:"uid_type"`
 }
 
 func FindDevices(c *gin.Context) {
@@ -30,7 +30,7 @@ func CreateDevice(c *gin.Context) {
 	// Create device if such UID is not occupied
 	var old models.Device
 	models.DB.Where("uid = ?", input.UID).First(&old)
-	if old.UID == input.UID {
+	if len(input.UID) > 0 && old.UID == input.UID {
 		c.JSON(http.StatusBadRequest, gin.H{})
 		return
 	}
